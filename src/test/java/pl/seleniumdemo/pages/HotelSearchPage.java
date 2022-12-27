@@ -8,6 +8,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public class HotelSearchPage {
     
     private final WebDriver driver;
@@ -36,6 +38,13 @@ public class HotelSearchPage {
     
     @FindBy(xpath = "//button[text()=' Search']")
     private WebElement searchButton;
+    
+    //SignupPage
+    @FindBy(xpath = "//li[@id='li_myaccount']")
+    private List<WebElement> myAccountLink;
+    
+    @FindBy(xpath = "//a[text()='  Sign Up']")
+    private List<WebElement> signUpLink;
     
     public HotelSearchPage(WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
@@ -70,5 +79,10 @@ public class HotelSearchPage {
     
     public void performSearch() {
         searchButton.click();
+    }
+    
+    public void openSingUpForm() {
+        myAccountLink.stream().filter(WebElement::isDisplayed).findFirst().ifPresent(WebElement::click);
+        signUpLink.get(1).click();
     }
 }
