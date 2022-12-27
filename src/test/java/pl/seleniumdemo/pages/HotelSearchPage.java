@@ -1,20 +1,23 @@
 package pl.seleniumdemo.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HotelSearchPage {
+    
+    private final WebDriver driver;
+    private final WebDriverWait wait;
     
     @FindBy(xpath = "//span[text()='Search by Hotel or City Name']")
     private WebElement searchHotelSpan;
     
     @FindBy(css = ".select2-input.select2-focused")
     private WebElement searchHotelInput;
-    
-    @FindBy(xpath = "//span[@class='select2-match' and text()='Dubai']")
-    private WebElement hotelMatch;
     
     @FindBy(name = "checkin")
     private WebElement checkinInput;
@@ -34,14 +37,17 @@ public class HotelSearchPage {
     @FindBy(xpath = "//button[text()=' Search']")
     private WebElement searchButton;
     
-    public HotelSearchPage(WebDriver driver) {
+    public HotelSearchPage(WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
+        this.wait = wait;
+        this.driver = driver;
     }
     
     public void setCity(String cityName) {
         searchHotelSpan.click();
         searchHotelInput.sendKeys(cityName);
-        hotelMatch.click();
+        String xpath = String.format("//span[@class='select2-match' and text()='%s']", cityName);
+        driver.findElement(By.xpath(xpath)).click();
     }
     
     public void setDates(String checkin, String checkout) {
@@ -49,10 +55,17 @@ public class HotelSearchPage {
         checkoutInput.sendKeys(checkout);
     }
     
-    public void setTravellers() {
+    public void setTravellers(int adultsToAdd, int childToAdd) {
         travellersInput.click();
-        aduldPlusBtn.click();
-        childPlsBtn.click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("adultPlusBtn")));
+        addTravellers(aduldPlusBtn, adultsToAdd);
+        addTravellers(childPlsBtn, childToAdd);
+    }
+    
+    public void addTravellers(WebElement element, int numberToAdd) {
+        for (int i = 0; i < numberToAdd; i++) {
+            element.click();
+        }
     }
     
     public void performSearch() {
