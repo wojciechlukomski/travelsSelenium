@@ -36,22 +36,6 @@ public class SignUpTest extends BaseTest {
     }
     
     @Test
-    public void signUpTest2() {
-        
-        HotelSearchPage hotelSearchPage = new HotelSearchPage(driver, wait);
-        hotelSearchPage.openSingUpForm();
-        
-        SignUpPage signUpPage = new SignUpPage(driver, wait);
-        signUpPage.fillSignUpForm("", "", "", "", "");
-        
-        String lastName = "Test";
-        LoggedUserPage loggedUserPage = new LoggedUserPage(driver, wait);
-        
-        assertTrue(loggedUserPage.getHeadingText().contains(lastName));
-        assertEquals("Hi, Wojtek Test", loggedUserPage.getHeadingText());
-    }
-    
-    @Test
     public void signUpInvalidEmailTest() {
         
         HotelSearchPage hotelSearchPage = new HotelSearchPage(driver, wait);

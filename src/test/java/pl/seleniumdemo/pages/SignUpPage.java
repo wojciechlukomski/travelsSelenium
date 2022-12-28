@@ -77,17 +77,8 @@ public class SignUpPage {
         signUpBtn.click();
     }
     
-    public void fillSignUpForm(String firstName, String lastName, String phone, String email, String password) {
-        fillUpFirstName(firstName);
-        fillUpLastName(lastName);
-        fillUpPhone(phone);
-        fillUpEmail(email);
-        fillUpPassword(password);
-        fillUpConfirmPassword(password);
-        performSignUp();
-    }
-    
     public List<String> getErrors() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='alert alert-danger']//p")));
         return errors.stream().map(WebElement::getText).collect(Collectors.toList());
     }
 }

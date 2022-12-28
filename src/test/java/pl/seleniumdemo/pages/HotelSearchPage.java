@@ -56,6 +56,7 @@ public class HotelSearchPage {
         searchHotelSpan.click();
         searchHotelInput.sendKeys(cityName);
         String xpath = String.format("//span[@class='select2-match' and text()='%s']", cityName);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
         driver.findElement(By.xpath(xpath)).click();
     }
     
@@ -78,6 +79,7 @@ public class HotelSearchPage {
     }
     
     public void performSearch() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()=' Search']")));
         searchButton.click();
     }
     
