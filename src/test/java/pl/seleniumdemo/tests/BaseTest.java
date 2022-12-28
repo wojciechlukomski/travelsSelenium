@@ -18,7 +18,6 @@ public class BaseTest {
     public void setup() {
         WebDriverManager.safaridriver().setup();
         driver = new SafariDriver();
-        
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         
         driver.manage().window().maximize();

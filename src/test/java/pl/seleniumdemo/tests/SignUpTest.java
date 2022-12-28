@@ -15,72 +15,52 @@ public class SignUpTest extends BaseTest {
     
     @Test
     public void signUpTest() {
-        
-        HotelSearchPage hotelSearchPage = new HotelSearchPage(driver, wait);
-        hotelSearchPage.openSingUpForm();
-        
-        SignUpPage signUpPage = new SignUpPage(driver, wait);
-        signUpPage.fillUpFirstName("Wojtek");
-        signUpPage.fillUpLastName("Test");
-        signUpPage.fillUpPhone("111222333");
-        signUpPage.fillUpEmail("@testerWojtek.pl");
-        signUpPage.fillUpPassword("test123");
-        signUpPage.fillUpConfirmPassword("test123");
-        signUpPage.performSignUp();
-        
-        String lastName = "Test";
-        LoggedUserPage loggedUserPage = new LoggedUserPage(driver, wait);
-        
-        assertTrue(loggedUserPage.getHeadingText().contains(lastName));
-        assertEquals("Hi, Wojtek Test", loggedUserPage.getHeadingText());
-    }
     
-    @Test
-    public void signUpTest2() {
-        
-        HotelSearchPage hotelSearchPage = new HotelSearchPage(driver, wait);
-        hotelSearchPage.openSingUpForm();
-        
-        SignUpPage signUpPage = new SignUpPage(driver, wait);
-        signUpPage.fillSignUpForm("", "", "", "", "");
-        
+        int randomNumber = (int) (Math.random() * 1000);
+        //tworzenie randomowego maila
+        String emailRandom = "tester" + randomNumber + "@testerWojtek.pl";
         String lastName = "Test";
-        LoggedUserPage loggedUserPage = new LoggedUserPage(driver, wait);
-        
+    
+        LoggedUserPage loggedUserPage = new HotelSearchPage(driver, wait)
+                .openSingUpForm()
+                .fillUpFirstName("Wojtek")
+                .fillUpLastName("Test")
+                .fillUpPhone("111222333")
+                .fillUpEmail(emailRandom)
+                .fillUpPassword("test123")
+                .fillUpConfirmPassword("test123")
+                .performSignUp();
+    
         assertTrue(loggedUserPage.getHeadingText().contains(lastName));
         assertEquals("Hi, Wojtek Test", loggedUserPage.getHeadingText());
     }
     
     @Test
     public void signUpInvalidEmailTest() {
-        
-        HotelSearchPage hotelSearchPage = new HotelSearchPage(driver, wait);
-        hotelSearchPage.openSingUpForm();
-        
-        SignUpPage signUpPage = new SignUpPage(driver, wait);
-        signUpPage.fillUpFirstName("Wojtek");
-        signUpPage.fillUpLastName("Test");
-        signUpPage.fillUpPhone("111222333");
-        signUpPage.fillUpEmail(".pl");
-        signUpPage.fillUpPassword("test123");
-        signUpPage.fillUpConfirmPassword("test123");
+    
+        SignUpPage signUpPage = new HotelSearchPage(driver, wait)
+                .openSingUpForm()
+                .fillUpFirstName("Wojtek")
+                .fillUpLastName("Test")
+                .fillUpPhone("111222333")
+                .fillUpEmail("email.pl")
+                .fillUpPassword("test123")
+                .fillUpConfirmPassword("test123");
         signUpPage.performSignUp();
-        
+    
         assertTrue(signUpPage.getErrors().contains("The Email field must contain a valid email address."));
     }
     
     @Test
-    public void signUpEmptyFieldsTest() {
+    public void signUpEmptyFieldsTest() throws InterruptedException {
         
-        HotelSearchPage hotelSearchPage = new HotelSearchPage(driver, wait);
-        hotelSearchPage.openSingUpForm();
-        
-        SignUpPage signUpPage = new SignUpPage(driver, wait);
+        SignUpPage signUpPage = new HotelSearchPage(driver, wait).openSingUpForm();
         signUpPage.performSignUp();
         
         List<String> errors = signUpPage.getErrors();
         
         SoftAssert softAssert = new SoftAssert();
+        
         softAssert.assertTrue(errors.contains("The Email field is required."));
         softAssert.assertTrue(errors.contains("The Password field is required."));
         softAssert.assertTrue(errors.contains("The Password field is required."));

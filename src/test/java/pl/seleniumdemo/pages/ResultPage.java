@@ -15,11 +15,11 @@ public class ResultPage {
     
     private final WebDriverWait wait;
     
-    @FindBy(xpath = "//h4[contains(@class,'list_title')]//b")
-    private List<WebElement> hotelList;
-    
     @FindBy(xpath = "//div[@class='itemscontainer']//h2")
     public WebElement resultHeading;
+    
+    @FindBy(xpath = "//h4[contains(@class,'list_title')]//b")
+    private List<WebElement> hotelList;
     
     public ResultPage(WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);

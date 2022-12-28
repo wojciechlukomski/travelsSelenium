@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class SignUpPage {
     
+    private final WebDriver driver;
     private final WebDriverWait wait;
     
     @FindBy(name = "firstname")
@@ -42,52 +43,48 @@ public class SignUpPage {
     public SignUpPage(WebDriver driver, WebDriverWait wait) {
         PageFactory.initElements(driver, this);
         this.wait = wait;
+        this.driver = driver;
     }
     
-    public void fillUpFirstName(String firstNameInput) {
+    public SignUpPage fillUpFirstName(String firstNameInput) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("firstname")));
         firstname.sendKeys(firstNameInput);
+        return this;
     }
     
-    public void fillUpLastName(String lastNameInput) {
+    public SignUpPage fillUpLastName(String lastNameInput) {
         lastname.sendKeys(lastNameInput);
+        return this;
     }
     
-    public void fillUpPhone(String phoneInput) {
+    public SignUpPage fillUpPhone(String phoneInput) {
         phone.sendKeys(phoneInput);
+        return this;
     }
     
-    public void fillUpEmail(String emailInput) {
-        int randomNumber = (int) (Math.random() * 1000);
-        //tworzenie randomowego maila
-        String emailRandom = "tester" + randomNumber + emailInput;
-        email.sendKeys(emailRandom);
+    public SignUpPage fillUpEmail(String emailInput) {
+        email.sendKeys(emailInput);
+        return this;
     }
     
-    public void fillUpPassword(String passwordInput) {
+    public SignUpPage fillUpPassword(String passwordInput) {
         password.sendKeys(passwordInput);
+        return this;
     }
     
-    public void fillUpConfirmPassword(String passwordConfirmInput) {
+    public SignUpPage fillUpConfirmPassword(String passwordConfirmInput) {
         confirmpassword.sendKeys(passwordConfirmInput);
+        return this;
     }
     
-    public void performSignUp() {
+    public LoggedUserPage performSignUp() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()=' Sign Up']")));
         signUpBtn.click();
-    }
-    
-    public void fillSignUpForm(String firstName, String lastName, String phone, String email, String password) {
-        fillUpFirstName(firstName);
-        fillUpLastName(lastName);
-        fillUpPhone(phone);
-        fillUpEmail(email);
-        fillUpPassword(password);
-        fillUpConfirmPassword(password);
-        performSignUp();
+        return new LoggedUserPage(driver, wait);
     }
     
     public List<String> getErrors() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='alert alert-danger']//p")));
         return errors.stream().map(WebElement::getText).collect(Collectors.toList());
     }
 }

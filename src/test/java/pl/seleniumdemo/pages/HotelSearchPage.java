@@ -52,23 +52,27 @@ public class HotelSearchPage {
         this.driver = driver;
     }
     
-    public void setCity(String cityName) {
+    public HotelSearchPage setCity(String cityName) throws InterruptedException {
         searchHotelSpan.click();
         searchHotelInput.sendKeys(cityName);
         String xpath = String.format("//span[@class='select2-match' and text()='%s']", cityName);
+        Thread.sleep(1000);
         driver.findElement(By.xpath(xpath)).click();
+        return this;
     }
     
-    public void setDates(String checkin, String checkout) {
+    public HotelSearchPage setDates(String checkin, String checkout) {
         checkinInput.sendKeys(checkin);
         checkoutInput.sendKeys(checkout);
+        return this;
     }
     
-    public void setTravellers(int adultsToAdd, int childToAdd) {
+    public HotelSearchPage setTravellers(int adultsToAdd, int childToAdd) {
         travellersInput.click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("adultPlusBtn")));
         addTravellers(aduldPlusBtn, adultsToAdd);
         addTravellers(childPlsBtn, childToAdd);
+        return this;
     }
     
     public void addTravellers(WebElement element, int numberToAdd) {
@@ -77,12 +81,14 @@ public class HotelSearchPage {
         }
     }
     
-    public void performSearch() {
+    public ResultPage performSearch() {
         searchButton.click();
+        return new ResultPage(driver, wait);
     }
     
-    public void openSingUpForm() {
+    public SignUpPage openSingUpForm() {
         myAccountLink.stream().filter(WebElement::isDisplayed).findFirst().ifPresent(WebElement::click);
         signUpLink.get(1).click();
+        return new SignUpPage(driver, wait);
     }
 }
