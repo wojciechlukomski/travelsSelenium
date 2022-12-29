@@ -1,5 +1,7 @@
 package pl.seleniumdemo.pages;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,9 +14,9 @@ import java.util.List;
 
 public class HotelSearchPage {
     
+    private static final Logger logger = LogManager.getLogger();
     private final WebDriver driver;
     private final WebDriverWait wait;
-    
     @FindBy(xpath = "//span[text()='Search by Hotel or City Name']")
     private WebElement searchHotelSpan;
     
@@ -53,23 +55,29 @@ public class HotelSearchPage {
     }
     
     public void setCity(String cityName) {
+        logger.info("Setting city " + cityName);
         searchHotelSpan.click();
         searchHotelInput.sendKeys(cityName);
         String xpath = String.format("//span[@class='select2-match' and text()='%s']", cityName);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
         driver.findElement(By.xpath(xpath)).click();
+        logger.info("Setting city DONE");
     }
     
     public void setDates(String checkin, String checkout) {
+        logger.info("Setting check in and check out");
         checkinInput.sendKeys(checkin);
         checkoutInput.sendKeys(checkout);
+        logger.info("Setting check in and check out DONE");
     }
     
     public void setTravellers(int adultsToAdd, int childToAdd) {
+        logger.info("Adding travellers");
         travellersInput.click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("adultPlusBtn")));
         addTravellers(aduldPlusBtn, adultsToAdd);
         addTravellers(childPlsBtn, childToAdd);
+        logger.info("Adding travellers DONE");
     }
     
     public void addTravellers(WebElement element, int numberToAdd) {
@@ -79,8 +87,10 @@ public class HotelSearchPage {
     }
     
     public void performSearch() {
+        logger.info("Performing search");
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()=' Search']")));
         searchButton.click();
+        logger.info("Performing search DONE");
     }
     
     public void openSingUpForm() {

@@ -35,7 +35,7 @@ public class SignUpTest extends BaseTest {
         assertEquals("Hi, Wojtek Test", loggedUserPage.getHeadingText());
     }
     
-    @Test
+    @Test(enabled = false)
     public void signUpInvalidEmailTest() {
         
         HotelSearchPage hotelSearchPage = new HotelSearchPage(driver, wait);
